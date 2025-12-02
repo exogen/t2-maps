@@ -26,6 +26,7 @@
     "build": "next build && touch docs/.nojekyll",
     "clean": "rimraf .next",
     "deploy": "npm run build && git add -f docs && git commit -m \"Deploy\" && git push",
+    "gallery": "tsx scripts/gallery.ts",
     "postbuild": "git checkout -- public/images",
     "prebuild": "npm run clean && git checkout -- docs && rimraf public/images && mv docs/images public/",
     "start": "next dev --turbopack"
@@ -35,7 +36,8 @@
     "next": "^16.0.5",
     "puppeteer": "^24.31.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "yet-another-react-lightbox": "^3.25.0"
   },
   "devDependencies": {
     "@types/react": "19.2.7",

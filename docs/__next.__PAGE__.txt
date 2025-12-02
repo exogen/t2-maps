@@ -1,9 +1,10 @@
 1:"$Sreact.fragment"
-2:I[47257,["/t2-map-gallery/_next/static/chunks/42879de7b8087bc9.js"],"ClientPageRoot"]
-3:I[31713,["/t2-map-gallery/_next/static/chunks/f7bb388fd4a22647.js"],"default"]
-6:I[97367,["/t2-map-gallery/_next/static/chunks/42879de7b8087bc9.js"],"OutletBoundary"]
+2:I[47257,["/t2-map-gallery/_next/static/chunks/c01280eff21a16b3.js"],"ClientPageRoot"]
+3:I[31713,["/t2-map-gallery/_next/static/chunks/dd4c9f27370ba4a6.js","/t2-map-gallery/_next/static/chunks/f184bdd271f2278a.js"],"default"]
+6:I[97367,["/t2-map-gallery/_next/static/chunks/c01280eff21a16b3.js"],"OutletBoundary"]
 7:"$Sreact.suspense"
-0:{"buildId":"9hDF6VF57sKjpNLv9gfIi","rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/t2-map-gallery/_next/static/chunks/f7bb388fd4a22647.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"loading":null,"isPartial":false}
+:HL["/t2-map-gallery/_next/static/chunks/a4d58bef501c3fa7.css","style"]
+0:{"buildId":"jNC3N0rVtx49cki_bMxSu","rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","link","0",{"rel":"stylesheet","href":"/t2-map-gallery/_next/static/chunks/a4d58bef501c3fa7.css","precedence":"next"}],["$","script","script-0",{"src":"/t2-map-gallery/_next/static/chunks/dd4c9f27370ba4a6.js","async":true}],["$","script","script-1",{"src":"/t2-map-gallery/_next/static/chunks/f184bdd271f2278a.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"loading":null,"isPartial":false}
 4:{}
 5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
 8:null

@@ -11,9 +11,21 @@ const browser = await puppeteer.launch({ headless: true });
 const page = await browser.newPage();
 await page.setViewport({ width: 800, height: 600 });
 
-const origin = "https://exogen.github.io";
+// const origin = "https://exogen.github.io";
+const origin = "http://localhost:3000";
 const baseUrl = `${origin}/t2-mapper/`;
 
+await page.evaluateOnNewDocument(() => {
+  localStorage.setItem(
+    "settings",
+    JSON.stringify({
+      fov: 90,
+      audioEnabled: false,
+      animationEnabled: false,
+      debugMode: false,
+    })
+  );
+});
 await page.goto(baseUrl, { waitUntil: "load" });
 await page.waitForNetworkIdle({ idleTime: 500 });
 

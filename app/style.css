@@ -1,6 +1,50 @@
+/* === TRIBES 2 MAP GALLERY - FUTURISTIC THEME === */
+/* Inspired by Tribes, Minority Report, and Tron */
+
+:root {
+  --color-cyan: #00f0ff;
+  --color-cyan-dim: #00a0aa;
+  --color-amber: #ffb000;
+  --color-bg-deep: #000;
+  --color-bg-panel: rgba(0, 20, 30, 0.85);
+  --color-grid: rgba(0, 180, 220, 0.03);
+  --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.5), 0 0 40px rgba(0, 240, 255, 0.2);
+  --glow-orange: 0 0 20px rgba(255, 107, 0, 0.6),
+    0 0 40px rgba(255, 176, 0, 0.3);
+  --glow-text: 0 0 10px currentColor, 0 0 20px currentColor;
+}
+
+/* Grid background pattern */
 body {
-  background: #000;
-  color: #eee;
+  margin: 0;
+  background: linear-gradient(var(--color-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px),
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(0, 100, 150, 0.15) 0%,
+      transparent 60%
+    ),
+    var(--color-bg-deep);
+  background-size: 50px 50px, 50px 50px, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+  color: #e0e0e0;
+  min-height: 100vh;
+}
+
+/* Scan line overlay - z-index below lightbox (9999) for clarity on full images */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+  pointer-events: none;
+  z-index: 200;
 }
 
 h1,
@@ -11,6 +55,7 @@ h5,
 h6 {
   font-weight: normal;
   font-family: var(--font-russo-one), sans-serif;
+  letter-spacing: 0.1em;
 }
 
 ul,
@@ -20,26 +65,16 @@ li {
   list-style: none;
 }
 
-.ImageList {
-  display: flex;
-  align-items: top;
-}
-
-.ImageItem {
-  flex: 1 1 auto;
-}
-
-.PreviewImage {
-  width: 100%;
-  height: auto;
-}
-
-.MapName {
-  font-size: 24px;
-  letter-spacing: 0.05em;
-  text-align: center;
-  text-shadow: 0 0 20px rgba(255, 183, 0, 0.85);
-  margin: 20px 0 10px 0;
+/* === HEADER / SEARCH === */
+header {
+  position: sticky;
+  top: 0;
+  background: var(--color-bg-panel);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 100;
+  border-bottom: 1px solid var(--color-cyan-dim);
+  box-shadow: 0 1px 0 rgba(0, 240, 255, 0.3), 0 4px 30px rgba(0, 0, 0, 0.8);
 }
 
 form {
@@ -51,10 +86,247 @@ form {
 
 .TextInput {
   font-size: 18px;
-  background: rgba(25, 98, 73, 0.2);
-  color: rgb(183, 255, 185);
-  border: 1px solid rgb(58, 255, 222);
-  border-radius: 10px;
+  font-family: var(--font-rajdhani), sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  background: rgba(0, 40, 50, 0.6);
+  color: var(--color-cyan);
+  border: 1px solid var(--color-cyan-dim);
   margin: 0;
-  padding: 10px;
+  padding: 12px 20px;
+  min-width: 300px;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.TextInput::placeholder {
+  color: var(--color-cyan-dim);
+  opacity: 0.7;
+}
+
+.TextInput:focus {
+  outline: none;
+  background: rgba(0, 60, 70, 0.8);
+  border-color: var(--color-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+/* === MISSION LIST === */
+.MissionList {
+  padding: 20px;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+.Mission {
+  scroll-margin-top: 80px;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: var(--color-bg-panel);
+  border: 1px solid rgba(0, 150, 180, 0.3);
+  position: relative;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 20px) 0,
+    100% 20px,
+    100% 100%,
+    20px 100%,
+    0 calc(100% - 20px)
+  );
+}
+
+/* Corner accents */
+.Mission::before,
+.Mission::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--color-cyan);
+  pointer-events: none;
+}
+
+.Mission::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.Mission::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+/* === MAP NAME === */
+.MapName {
+  font-family: var(--font-exo2), sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--color-amber);
+  text-shadow: var(--glow-orange);
+  margin: 0 0 4px 0;
+}
+
+.MapSlug {
+  font-family: var(--font-exo2), sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: #666;
+  margin: 0 0 15px 0;
+}
+
+/* === IMAGE GRID === */
+.ImageList {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+}
+
+.ImageItem {
+  flex: 0 1 auto;
+}
+
+.ImageLightboxTrigger {
+  display: block;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  outline: none; /* Custom focus styles via ::before */
+}
+
+.ImageLightboxTrigger::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ImageLightboxTrigger:hover::before,
+.ImageLightboxTrigger:focus-visible::before {
+  border-color: var(--color-cyan);
+  box-shadow: inset 0 0 30px rgba(0, 240, 255, 0.2), var(--glow-cyan);
+}
+
+.ImageLightboxTrigger::after {
+  content: "◈ VIEW";
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  font-family: var(--font-rajdhani), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  color: var(--color-cyan);
+  text-shadow: var(--glow-text);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ImageLightboxTrigger:hover::after,
+.ImageLightboxTrigger:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.PreviewImage {
+  width: 100%;
+  height: auto;
+  max-width: 400px;
+  max-height: 300px;
+  display: block;
+  transition: filter 0.4s ease, transform 0.4s ease;
+  filter: saturate(0.9);
+}
+
+.ImageLightboxTrigger:hover .PreviewImage,
+.ImageLightboxTrigger:focus-visible .PreviewImage {
+  filter: saturate(1.1) brightness(1.1);
+  transform: scale(1.02);
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 20, 30, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-cyan-dim);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cyan);
+}
+
+/* === SELECTION === */
+::selection {
+  background: var(--color-cyan);
+  color: #000;
+}
+
+/* === LIGHTBOX === */
+.yarl__root {
+  --yarl__color_backdrop: rgba(0, 5, 10, 0.95);
+  --yarl__color_button: var(--color-cyan-dim);
+  --yarl__color_button_active: var(--color-cyan);
+}
+
+.yarl__slide_image {
+  border: 1px solid var(--color-cyan-dim);
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.3), 0 0 60px rgba(0, 240, 255, 0.1);
+}
+
+.yarl__button {
+  filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.5));
+  transition: filter 0.2s ease, color 0.2s ease;
+}
+
+.yarl__button:hover,
+.yarl__button:focus {
+  filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.8));
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .TextInput {
+    min-width: 200px;
+    font-size: 16px;
+  }
+
+  .MapName {
+    font-size: 18px;
+  }
+
+  .MapSlug {
+    font-size: 11px;
+  }
+
+  .Mission {
+    padding: 15px;
+    margin-bottom: 25px;
+  }
+
+  .ImageLightboxTrigger::after {
+    display: none;
+  }
 }
