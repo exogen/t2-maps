@@ -85,7 +85,9 @@ for (const missionName of missionNames) {
     (name) => (window as any).setMissionName(name),
     missionName
   );
+  await sleep(500);
   await page.waitForNetworkIdle({ idleTime: 1000 });
+  await sleep(500);
 
   // Currently, the only way to really know if there are enough cameras to
   // select is to see if the image data in the <canvas> actually changed after

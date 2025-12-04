@@ -57,7 +57,7 @@ function Mission({
 
   return (
     <section>
-      <h3 className="MapName">{displayName}</h3>
+      <h3 className="MapName">{displayName || missionName}</h3>
       <p className="MapSlug">{missionName}</p>
       <ul className="ImageList">
         {images.map((image, i) => {
@@ -76,8 +76,8 @@ function Mission({
                   className="PreviewImage"
                   src={image.src}
                   alt={`${displayName} map screenshot #${i + 1}`}
-                  width={800}
-                  height={600}
+                  width={1280}
+                  height={720}
                   loading="lazy"
                 />
               </a>
