@@ -26,7 +26,7 @@ await page.evaluateOnNewDocument(() => {
   );
 });
 await page.goto(baseUrl, { waitUntil: "load" });
-await page.waitForNetworkIdle({ idleTime: 3000 });
+await page.waitForNetworkIdle({ idleTime: 2000 });
 
 const outputType = "webp";
 
@@ -85,8 +85,8 @@ for (const missionName of missionNames) {
     (name) => (window as any).setMissionName(name),
     missionName
   );
-  await sleep(500);
-  await page.waitForNetworkIdle({ idleTime: 1000 });
+  await page.waitForNetworkIdle({ idleTime: 500 });
+  await page.waitForSelector("#loadingIndicator", { hidden: true });
   await sleep(500);
 
   // Currently, the only way to really know if there are enough cameras to
