@@ -1,6 +1,7 @@
 "use client";
 import { useMemo, useState, useDeferredValue, useEffect, useRef } from "react";
 import { matchSorter } from "match-sorter";
+import { LuRocket } from "react-icons/lu";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
@@ -17,6 +18,7 @@ const BASE_URL = "/t2-maps/";
 type Mission = {
   missionName: string;
   displayName: string;
+  missionTypes: string[];
   imageCount: number;
 };
 
@@ -31,6 +33,13 @@ const controllerSettings = {
   closeOnBackdropClick: true,
 };
 
+const missionTypeNames = {
+  arena: "Arena",
+  ctf: "CTF",
+  sctf: "SCTF",
+  teamhunters: "Team Hunters",
+};
+
 function getMissionImages({ missionName, displayName, imageCount }: Mission) {
   return Array.from({ length: imageCount }, (_, i) => ({
     src: `${BASE_URL}images/${missionName}.${i + 1}.webp`,
@@ -42,23 +51,55 @@ function getMissionImages({ missionName, displayName, imageCount }: Mission) {
 function Mission({
   missionName,
   displayName,
+  missionTypes,
   imageCount,
   onOpen,
 }: {
   missionName: string;
   displayName: string;
+  missionTypes: string[];
   imageCount: number;
   onOpen: (index: number) => void;
 }) {
   const images = useMemo(
-    () => getMissionImages({ missionName, displayName, imageCount }),
+    () =>
+      getMissionImages({ missionName, displayName, imageCount, missionTypes }),
     [missionName, displayName, imageCount]
   );
 
   return (
     <section>
-      <h3 className="MapName">{displayName || missionName}</h3>
-      <p className="MapSlug">{missionName}</p>
+      <header className="MissionHeader">
+        <div className="HeaderBefore"></div>
+        <div className="MissionDetails">
+          <div className="SubHeading">
+            <h3 className="MapName">{displayName || missionName}</h3>
+            {missionTypes && missionTypes.length ? (
+              <>
+                <ul className="MissionTypes">
+                  {missionTypes.map((missionType) => (
+                    <li className="MissionType" key={missionType}>
+                      {missionTypeNames[missionType.toLowerCase()] ??
+                        missionType}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+          </div>
+          <p className="MapSlug">{missionName}</p>
+        </div>
+        <div className="HeaderAfter">
+          <a
+            href={`https://exogen.github.io/t2-mapper/?mission=${missionName}`}
+            target="_blank"
+            title="Launch mission in T2 Map Inspector"
+            className="LaunchLink"
+          >
+            <LuRocket />
+          </a>
+        </div>
+      </header>
       <ul className="ImageList">
         {images.map((image, i) => {
           return (
@@ -104,7 +145,7 @@ export default function GalleryPage() {
       return allMissions;
     }
     return matchSorter(allMissions, deferredFilter, {
-      keys: ["missionName", "displayName"],
+      keys: ["missionName", "displayName", "missionTypes"],
     });
   }, [deferredFilter]);
 
@@ -147,7 +188,7 @@ export default function GalleryPage() {
 
   return (
     <main>
-      <header>
+      <header id="FilterControls">
         <form onSubmit={(e) => e.preventDefault()}>
           <input
             ref={searchInputRef}
@@ -165,20 +206,23 @@ export default function GalleryPage() {
         </form>
       </header>
       <ul className="MissionList">
-        {missionList.map(({ missionName, displayName, imageCount }) => {
-          return (
-            <li key={missionName} className="Mission" id={missionName}>
-              <Mission
-                missionName={missionName}
-                displayName={displayName}
-                imageCount={imageCount}
-                onOpen={(index) =>
-                  setActiveMission({ name: missionName, index })
-                }
-              />
-            </li>
-          );
-        })}
+        {missionList.map(
+          ({ missionName, displayName, imageCount, missionTypes }) => {
+            return (
+              <li key={missionName} className="Mission" id={missionName}>
+                <Mission
+                  missionName={missionName}
+                  displayName={displayName}
+                  missionTypes={missionTypes}
+                  imageCount={imageCount}
+                  onOpen={(index) =>
+                    setActiveMission({ name: missionName, index })
+                  }
+                />
+              </li>
+            );
+          }
+        )}
       </ul>
       <Lightbox
         open={activeMission != null}
@@ -188,6 +232,21 @@ export default function GalleryPage() {
         animation={animationSettings}
         controller={controllerSettings}
         carousel={{ padding: 64 }}
+        toolbar={{
+          buttons: [
+            activeMission ? (
+              <a
+                href={`https://exogen.github.io/t2-mapper/?mission=${activeMission.name}`}
+                target="_blank"
+                title="Launch mission in T2 Map Inspector"
+                className="ToolbarLaunchLink"
+              >
+                <LuRocket />
+              </a>
+            ) : null,
+            "close",
+          ],
+        }}
         render={{
           slide: ({ slide }) => (
             <div className="LightboxSlide" onClick={(e) => e.stopPropagation()}>

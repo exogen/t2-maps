@@ -52,7 +52,7 @@ const missionNames: string[] = await page.evaluate(() =>
 
 for (const missionName of missionNames) {
   // Get mission info from the global getMissionInfo() function
-  const { displayName } = await page.evaluate(
+  const { displayName, missionTypes } = await page.evaluate(
     (name) => (window as any).getMissionInfo(name),
     missionName
   );
@@ -70,6 +70,7 @@ for (const missionName of missionNames) {
     missions[missionName] = {
       missionName,
       displayName,
+      missionTypes,
       imageCount: existingCount,
     };
     console.log(
@@ -115,7 +116,12 @@ for (const missionName of missionNames) {
     console.log(`Took screenshot #${i + 1}: ${outputPath}`);
   }
 
-  missions[missionName] = { missionName, displayName, imageCount: i };
+  missions[missionName] = {
+    missionName,
+    displayName,
+    missionTypes,
+    imageCount: i,
+  };
 }
 
 await fs.writeFile("app/missions.json", JSON.stringify(missions), "utf8");
