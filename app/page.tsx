@@ -3,6 +3,13 @@ import { useMemo, useState, useDeferredValue, useEffect, useRef } from "react";
 import { matchSorter } from "match-sorter";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+
+declare module "yet-another-react-lightbox" {
+  interface SlideImage {
+    displayName: string;
+    missionName: string;
+  }
+}
 import untypedMissionsJson from "./missions.json";
 
 const BASE_URL = "/t2-maps/";
@@ -24,14 +31,11 @@ const controllerSettings = {
   closeOnBackdropClick: true,
 };
 
-function getMissionImages(
-  missionName: string,
-  displayName: string,
-  imageCount: number
-) {
+function getMissionImages({ missionName, displayName, imageCount }: Mission) {
   return Array.from({ length: imageCount }, (_, i) => ({
     src: `${BASE_URL}images/${missionName}.${i + 1}.webp`,
     displayName,
+    missionName,
   }));
 }
 
@@ -47,7 +51,7 @@ function Mission({
   onOpen: (index: number) => void;
 }) {
   const images = useMemo(
-    () => getMissionImages(missionName, displayName, imageCount),
+    () => getMissionImages({ missionName, displayName, imageCount }),
     [missionName, displayName, imageCount]
   );
 
@@ -138,11 +142,7 @@ export default function GalleryPage() {
 
   const activeMissionData = activeMission ? missions[activeMission.name] : null;
   const lightboxSlides = activeMissionData
-    ? getMissionImages(
-        activeMissionData.missionName,
-        activeMissionData.displayName,
-        activeMissionData.imageCount
-      )
+    ? getMissionImages(activeMissionData)
     : [];
 
   return (
@@ -187,13 +187,14 @@ export default function GalleryPage() {
         index={activeMission?.index ?? 0}
         animation={animationSettings}
         controller={controllerSettings}
+        carousel={{ padding: 64 }}
         render={{
           slide: ({ slide }) => (
             <div className="LightboxSlide" onClick={(e) => e.stopPropagation()}>
               <figure>
                 <img src={slide.src} alt="" />
                 <figcaption className="LightboxLabel">
-                  {(slide as { displayName?: string }).displayName}
+                  {slide.displayName || slide.missionName}
                 </figcaption>
               </figure>
             </div>
