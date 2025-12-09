@@ -88,7 +88,8 @@ for (const missionName of missionNames) {
   );
   await page.waitForNetworkIdle({ idleTime: 500 });
   await page.waitForSelector("#loadingIndicator", { hidden: true });
-  await sleep(500);
+  await page.waitForNetworkIdle({ idleTime: 1000 });
+  await sleep(1000);
 
   // Currently, the only way to really know if there are enough cameras to
   // select is to see if the image data in the <canvas> actually changed after
@@ -111,7 +112,7 @@ for (const missionName of missionNames) {
     await mapViewer.screenshot({
       path: outputPath,
       type: outputType,
-      quality: 90,
+      quality: 99,
     });
     console.log(`Took screenshot #${i + 1}: ${outputPath}`);
   }
