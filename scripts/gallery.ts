@@ -125,9 +125,12 @@ for (const missionName of missionNames) {
   };
 }
 
+console.log(`Writing app/missions.json…`);
 await fs.writeFile("app/missions.json", JSON.stringify(missions), "utf8");
+console.log("Done.");
 
 await Promise.race([
   browser.close(),
   sleep(5000).then(() => browser.process()?.kill("SIGKILL")),
+  sleep(6000).then(() => process.exit(1)),
 ]);
