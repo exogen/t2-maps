@@ -27,23 +27,30 @@
     "clean": "rimraf .next",
     "deploy": "npm run build && git add -f docs && git commit -m \"Deploy\" && git push",
     "gallery": "tsx scripts/gallery.ts",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "postbuild": "git checkout -- public/images",
     "prebuild": "npm run clean && git checkout -- docs && rimraf public/images && mv docs/images public/",
-    "start": "next dev --turbopack"
+    "start": "next dev --turbopack",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "match-sorter": "^8.2.0",
-    "next": "^16.0.5",
-    "puppeteer": "^24.31.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "next": "^16.1.1",
+    "puppeteer": "^24.34.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "react-icons": "^5.5.0",
-    "yet-another-react-lightbox": "^3.25.0"
+    "yet-another-react-lightbox": "^3.28.0"
   },
   "devDependencies": {
     "@types/react": "19.2.7",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.1",
+    "jiti": "^2.6.1",
     "rimraf": "^6.1.2",
-    "tsx": "^4.20.6",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

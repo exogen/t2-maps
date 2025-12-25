@@ -2,16 +2,9 @@
 import { useMemo, useState, useDeferredValue, useEffect, useRef } from "react";
 import { matchSorter } from "match-sorter";
 import { LuRocket } from "react-icons/lu";
-import Lightbox from "yet-another-react-lightbox";
-import "yet-another-react-lightbox/styles.css";
-
-declare module "yet-another-react-lightbox" {
-  interface SlideImage {
-    displayName: string;
-    missionName: string;
-  }
-}
 import untypedMissionsJson from "./missions.json";
+import { useLocationHash } from "./useLocationHash";
+import LightBox from "./Lightbox";
 
 const BASE_URL = "/t2-maps/";
 
@@ -24,14 +17,6 @@ type Mission = {
 
 const missions = untypedMissionsJson as Record<string, Mission>;
 const allMissions = Object.values(missions);
-
-const animationSettings = {
-  swipe: 150,
-};
-
-const controllerSettings = {
-  closeOnBackdropClick: true,
-};
 
 const missionTypeNames = {
   arena: "Arena",
@@ -64,7 +49,7 @@ function Mission({
   const images = useMemo(
     () =>
       getMissionImages({ missionName, displayName, imageCount, missionTypes }),
-    [missionName, displayName, imageCount]
+    [missionName, displayName, imageCount, missionTypes]
   );
 
   return (
@@ -134,11 +119,13 @@ export default function GalleryPage() {
   const [filter, setFilter] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
   const deferredFilter = useDeferredValue(filter);
-  const [activeMission, setActiveMission] = useState<{
-    name: string;
-    index: number;
-  } | null>(null);
+  const [hash, setHash] = useLocationHash({ subscribe: false });
+  const [imageIndex, setImageIndex] = useState(0);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const activeMission = useMemo(() => {
+    return hash ? { name: hash, index: imageIndex } : null;
+  }, [hash, imageIndex]);
 
   const missionList = useMemo(() => {
     if (!deferredFilter.trim()) {
@@ -156,14 +143,6 @@ export default function GalleryPage() {
     }
   }, [deferredFilter, hasSearched]);
 
-  // Open lightbox if page is loaded with a #hash matching a mission
-  useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    if (hash && missions[hash]) {
-      setActiveMission({ name: hash, index: 0 });
-    }
-  }, []);
-
   // Focus search input on Cmd-K (Mac) or Ctrl-K (Windows)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -177,8 +156,8 @@ export default function GalleryPage() {
   }, []);
 
   const closeLightbox = () => {
-    history.replaceState(null, "", location.pathname);
-    setActiveMission(null);
+    setImageIndex(0);
+    setHash("");
   };
 
   const activeMissionData = activeMission ? missions[activeMission.name] : null;
@@ -215,50 +194,21 @@ export default function GalleryPage() {
                   displayName={displayName}
                   missionTypes={missionTypes}
                   imageCount={imageCount}
-                  onOpen={(index) =>
-                    setActiveMission({ name: missionName, index })
-                  }
+                  onOpen={(index) => {
+                    setHash(missionName);
+                    setImageIndex(index);
+                  }}
                 />
               </li>
             );
           }
         )}
       </ul>
-      <Lightbox
-        open={activeMission != null}
+      <LightBox
+        title={activeMissionData?.displayName ?? activeMissionData?.missionName}
+        activeMission={activeMission}
         close={closeLightbox}
         slides={lightboxSlides}
-        index={activeMission?.index ?? 0}
-        animation={animationSettings}
-        controller={controllerSettings}
-        carousel={{ padding: 64 }}
-        toolbar={{
-          buttons: [
-            activeMission ? (
-              <a
-                href={`https://exogen.github.io/t2-mapper/?mission=${activeMission.name}`}
-                target="_blank"
-                title="Launch mission in T2 Map Inspector"
-                className="ToolbarLaunchLink"
-              >
-                <LuRocket />
-              </a>
-            ) : null,
-            "close",
-          ],
-        }}
-        render={{
-          slide: ({ slide }) => (
-            <div className="LightboxSlide" onClick={(e) => e.stopPropagation()}>
-              <figure>
-                <img src={slide.src} alt="" />
-                <figcaption className="LightboxLabel">
-                  {slide.displayName || slide.missionName}
-                </figcaption>
-              </figure>
-            </div>
-          ),
-        }}
       />
     </main>
   );

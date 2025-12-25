@@ -1,0 +1,27 @@
+.yarl__root {
+  --yarl__color_backdrop: rgba(0, 5, 10, 0.95);
+  --yarl__color_button: var(--color-cyan-dim);
+  --yarl__color_button_active: var(--color-cyan);
+}
+
+.yarl__toolbar {
+  gap: 10px;
+  align-items: center;
+  inset: 0 0 auto 0;
+}
+
+.yarl__button {
+  filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.5));
+  transition: filter 0.2s ease, color 0.2s ease;
+}
+
+.yarl__button:hover,
+.yarl__button:focus {
+  filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.8));
+}
+
+.yarl__navigation_prev,
+.yarl__navigation_next {
+  --yarl__icon_size: 40px;
+  --yarl__navigation_button_padding: 16px;
+}
